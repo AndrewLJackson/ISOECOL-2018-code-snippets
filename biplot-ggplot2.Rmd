@@ -9,6 +9,8 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE, fig.width = 9, fig.height = 6)
 ```
 
+This script illustrates how to create a variety of isotope biplots using ggplot2 functions.
+
 Import the data as before. Note that we get some warnings from both that "objects are masked from" various packages. This is because the packages we have just loaded have functions of the same name as those that have already been loaded (usually ones from the base R packages). This warning is telling us that, in the case of `filter`, when we simply call `filter()`, we will be using the last loaded one, i.e. from `dplyr`, rather than the one from `stats`. If you want to force R to use a particular function from a particular package you can write the long form, `dplyr::filter()` or `stats::filter()`. In many ways, it is good practice to always use this format, but in reality we are all lazy.
 
 ```{r import-data}
@@ -17,14 +19,39 @@ Import the data as before. Note that we get some warnings from both that "object
 
 library(dplyr)
 library(ggplot2)
+library(viridis) # for nicer colours
+
+# only needed to simulate the data in this example
+# If you have it installed you dont need to load the 
+# entire package here as i call it directly 
+# below using pkg::fun notation
+#library(SIBER) 
 
 # import the data. 
 # If you get an error about "No such file or directory" then you 
 # need to take care about where R is currently working, and where your 
 # data file is in relation to this.
-mydata <- read.csv("Practical01.csv", 
-                   header = TRUE, 
-                   stringsAsFactors = FALSE)
+# mydata <- read.csv("Practical01.csv", 
+#                    header = TRUE, 
+#                    stringsAsFactors = FALSE)
+
+# for this example I am going to simulate some data using some of the SIBER
+# functions.
+set.seed(5)
+mydata <- SIBER::generateSiberCommunity(n.groups = 3, 
+                                        n.obs = 20,
+                                        mu.range = c(-10,10,-10,10),
+                                        wishSigmaScale = 0.1)
+
+# rename the column headers
+# NB the "community" column is not needed in this example
+# but could be used to draw multiple panels via 
+# facet_wrap
+colnames(mydata) <- c("d13C","d15N","Taxon","community")
+
+# coerce Taxon to be factor
+mydata$Taxon <- factor(mydata$Taxon)
+
 
 # As per the summary statistics file, I am going to remove our outlier
 # note the use of dplyr::filter() to avoid loading the entire 
@@ -37,7 +64,7 @@ head(mydata)
 
 # if the data is not a massive dataset, you might like to look  
 # at it all
-mydata
+# mydata
 ```
 
 The graphics that are part of "base R" are not very pretty (or at least some people think so - I quite like them to be honest). Another one of Hadley Wickham's very popular packages is `ggplot2` which by default makes some very blog-friendly graphics. And of course you can change the theme (template) on them to get something more suitable for publication (and fashion seems to be changing here too).
@@ -50,7 +77,9 @@ first.plot <- ggplot(data = mydata, aes(d13C, d15N)) +
   geom_point(aes(color = Taxon), size = 2)+
   ylab(expression(paste(delta^{15}, "N (\u2030)")))+
   xlab(expression(paste(delta^{13}, "C (\u2030)"))) + 
-  theme(text = element_text(size=15))
+  theme(text = element_text(size=15)) +
+  scale_color_viridis(discrete = TRUE, begin = 0, end = 0.9) + 
+  scale_fill_viridis(discrete = TRUE, begin = 0, end = 0.9)
 print(first.plot)
 
 ```
@@ -60,7 +89,7 @@ If you want to use the more normal plotting format for journals without gridline
 ```{r classic-theme}
 
 classic.first.plot <- first.plot + theme_classic() + 
-  theme(text = element_text(size=15))
+  theme(text = element_text(size = 15))
 print(classic.first.plot)
 
 # options to add to point the axis tick marks inwards
@@ -78,9 +107,9 @@ Adding the means and error bars in both directions to create the classic isotope
 
 sbg <- mydata %>% group_by(Taxon) %>% 
   summarise(count = length(Taxon),
-            mC = mean(d13C), 
+            mC  = mean(d13C), 
             sdC = sd(d13C), 
-            mN = mean(d15N), 
+            mN  = mean(d15N), 
             sdN = sd(d15N) )
 
 
@@ -141,7 +170,11 @@ print(ellipse.plot)
 
 ## Trouble shooting
 
-If the permil symbol `r "\u2030"` is not showing correctly (and instead is printing as $\text{\u2030}$ in your plot it is likely because your computer is not set up to use UTF-8 format character encoding. This is not a problem with your setup of R or Rstudio, but is deeper in your computer. It is fixed by changing the region or locale settings on your computer. You can access these in the system preferences area of your computer's operating system. To check if your computer is set up to identify and interpret UTF-8 encoding, you can type `sessionInfo()` in the R console. You should see something like this: `en_IE.UTF-8/en_IE.UTF-8/en_IE.UTF-8/C/en_IE.UTF-8/en_IE.UTF-8` under the heading "locale". On my machine, this indicates that it is use english (en), for Ireland (IE) and the UTF-8 encoding format. If the UTF-8 format is missing from your `sessionInfo()` then you could try changing your operating system to a locale similar to your own region's location and see if the UTF-8 format is supported there.
+If the permil symbol `r "\u2030"` is not showing correctly (and instead is printing as $\text{\u2030}$ in your plot it is likely because your computer is not set up to use UTF-8 format character encoding. 
+
+Since writing the content below, I have wondered if R is simply inheriting the locale setting from your operating system, and perhaps you can override ride from with in R using the function `Sys.setlocale`. I havent checked this, but suggest you try to change this first, and failing that you can change your OS region/locale settings. Something like `Sys.setlocale(category = "LC_ALL", locale = "en")` might work, but again, I havent checked.
+
+This is not a problem with your setup of R or Rstudio, but is deeper in your computer. It is fixed by changing the region or locale settings on your computer.You can access the region and locale settings in the system preferences area of your computer's operating system. To check if your computer is set up to identify and interpret UTF-8 encoding, you can type `sessionInfo()` in the R console. You should see something like this: `en_IE.UTF-8/en_IE.UTF-8/en_IE.UTF-8/C/en_IE.UTF-8/en_IE.UTF-8` under the heading "locale". On my machine, this indicates that it is using english (en), for Ireland (IE) and the UTF-8 encoding format. If the UTF-8 format is missing from your `sessionInfo()` then you could try changing your operating system to a locale similar to your own region's location and see if the UTF-8 format is supported there. More specifically, calling `l10n_info()` should yield `$UTF-8 [1] TRUE` indicating that this encoding is supported.
 
 
 
