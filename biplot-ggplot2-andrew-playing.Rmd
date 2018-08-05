@@ -167,6 +167,33 @@ ellipse.plot <- first.plot +
 
 print(ellipse.plot)
 
+
+```
+
+Plot the data using the original SIBER method for comparison
+
+```{r plot-siber}
+
+mydata.2 <- mydata
+colnames(mydata.2) <- c("iso1", "iso2", "group", "community")
+
+siber <- SIBER::createSiberObject(mydata.2)
+
+SIBER::plotSiberObject(siber, 
+                       hulls = FALSE, ellipses = FALSE)
+
+SIBER::addEllipse(siber$ML.cov[,,1], 
+                  siber$ML.mu, 
+                  m = siber$sample.sizes[1], 
+                  small.sample = TRUE, 
+                  p.interval = p.ell, 
+                  ci.mean = FALSE)
+
+```
+
+
+Compare with the stat_ellipse() function in ggplot which does the maths a little differently, including using the `qf()` rather than `qchisq()` to scale the ellipses.
+```{r stat-ellipse-original}
 ellipse.plot.2 <- first.plot + 
   stat_ellipse(aes(group = Taxon, 
                    fill = Taxon, 
@@ -177,6 +204,7 @@ ellipse.plot.2 <- first.plot +
                geom = "polygon")
 
 print(ellipse.plot.2)
+
 
 ```
 

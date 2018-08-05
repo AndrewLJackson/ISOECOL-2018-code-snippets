@@ -1,0 +1,25 @@
+---
+title: "How can I compare isotopic niches between two groups?"
+output: html_notebook
+editor_options: 
+  chunk_output_type: inline
+---
+
+```{r setup}
+library(SIBER)
+```
+
+There is no single say to compare the isotopic niches between two or more groups of data. We do however have a reasonably small number of ways that make sense to ask questions about how the distribution of two sets of numbers differ: indeed these questions are no different to simple univariate situations. Equally, the concept of the isotopic niche is no different to the concept of the niche in general, and so the same complexity to pinning down the similarities or differences between two niches applies. Ultimately, the choice you make depends on the question you might want to ask of your data and this is the order in which it should be done: question first, select the metric second, and finally calculate a statistic to determine the importance or significance of the difference.
+
+Table 1. A table of possible comparisons between two isotopic niches represented by ellipses.
+
+Comparison | In words | Parameters 
+----------- | ---------------------------------------- | ---------------
+Size     | Are the ellipses the same size? | $\text{SEA}_{\alpha1} \neq \text{SEA}_{\alpha2}$
+Location | Are the means different? | $\mu_1 \neq \mu_1$
+Shape | Is the ratio of length to breadth (their eccentricity) the same? | $e_1 \neq e_2$
+Orientation | Are the angles (correlations) of the ellipses the same? | $\rho_1 \neq \rho_2 $
+Overlap | How much do the ellipses overlap? | $\text{Overlap}= \text{SEA}_{\alpha1} \cap \text{SEA}_{\alpha2}$
+
+
+

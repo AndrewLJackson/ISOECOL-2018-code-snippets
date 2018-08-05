@@ -1,0 +1,27 @@
+---
+title: "Modelling Roadmap Paper"
+author: "Andrew L Jackson"
+date: "2/8/2018"
+output: html_document
+---
+
+Ideas for the modelling framework / roadmap paper proposed by Clive at ISOECOL2018.
+
+Incoporation processes to consider:
+
+- growth rate
+- body mass (where on the growth curve are you - also see growth rate above)
+- what tissue is being built? (where are isotopes getting routed)
+  - fat
+  - muscle
+  - gonads
+- stoichiometry of food (probably waaaay too complex)
+
+Dynamic models Pecquarie et al DEB model.
+
+Can we model an individual as a simple block of muscle and fat and allow it to grow via incorporation?
+
+## Tamsin's talk
+
+- "why you arent what you eat" [Schoeller J Archaeol Sci 1999](https://pdfs.semanticscholar.org/6b09/63175e6ed894901a0c69789c4602d15fa3e1.pdf)
+- 

@@ -1,0 +1,28 @@
+---
+title: "Bayesian Movement Model Around an Isoscape"
+output: html_notebook
+editor_options: 
+  chunk_output_type: inline
+---
+
+This script is a first attempt to build a dynamic movement model to reconstruct the movement of an organisms around its isoscape environment.
+
+Here I will simulate an animal moving around the "isoscape" that is the volcano dataset.
+
+```{r simulate-movement}
+
+data(volcano)
+
+isoscape <- volcano
+rm(volcano)
+
+set.seed(1)
+
+# starting cell
+start <- c(30, 25)
+
+
+
+
+```
+

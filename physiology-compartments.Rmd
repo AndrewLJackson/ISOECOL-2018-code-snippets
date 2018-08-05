@@ -1,0 +1,54 @@
+---
+title: "R Notebook"
+output: html_notebook
+editor_options: 
+  chunk_output_type: inline
+---
+
+File exploring the difference between a single compartment, and a multi-compartment model for considering effect of resolution on understanding and modelling of physiology on TDFs.
+
+```{r setup}
+library(deSolve)
+
+```
+
+```{r physiology-compartments}
+
+physy <- function(t, X, parameters){
+  
+  with(as.list(c(parameters)), {
+    
+    dX <- numeric(n)
+    
+    dX[1] <- (u * K[1]) - (X[1] * K[1])
+    
+    # dX[2] <- (X[1] * K[1]) - (X[2] * K[2])
+    
+    for (i in 2:n) {
+      dX[i] <- (K[i-1] * X[i-1]) - (X[i] * K[i])
+      # print(X)
+    }
+    
+    return(list(dX))
+  })
+  
+}
+
+# set up the K matrix
+n <- 5 # number of compartments
+
+k <- 0.1
+
+K <- rep(k, n) * 1
+
+parameters <- c(u = 100, K = K, n = n)
+state <- rep(0, n)
+times <- seq(0, 120, by = 1)
+
+out <- ode(y = state, times = times, func = physy, parms = parameters)
+
+matplot(out[,1], out[,2:(n+1)], type = "l", lty = 1, pch = NA)
+
+```
+
+

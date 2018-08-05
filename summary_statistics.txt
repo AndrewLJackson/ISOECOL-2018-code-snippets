@@ -1,0 +1,15 @@
+
+#################################################################
+# Summary Statistics
+#################################################################
+
+DIC = 321.7348
+
+                               Mean    SD  2.5%    5%   25%   50%   75%
+p.global.Subsurface POM       0.425 0.230 0.023 0.046 0.223 0.467 0.602
+p.global.Surface POM          0.369 0.206 0.031 0.056 0.210 0.363 0.489
+p.global.Terrestrial Detritus 0.206 0.214 0.003 0.005 0.035 0.122 0.325
+                                95% 97.5%
+p.global.Subsurface POM       0.772 0.808
+p.global.Surface POM          0.764 0.839
+p.global.Terrestrial Detritus 0.659 0.760
