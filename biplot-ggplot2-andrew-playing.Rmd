@@ -182,8 +182,8 @@ siber <- SIBER::createSiberObject(mydata.2)
 SIBER::plotSiberObject(siber, 
                        hulls = FALSE, ellipses = FALSE)
 
-SIBER::addEllipse(siber$ML.cov[,,1], 
-                  siber$ML.mu, 
+SIBER::addEllipse(siber$ML.cov[[1]][,,1], 
+                  siber$ML.mu[[1]][,,1], 
                   m = siber$sample.sizes[1], 
                   small.sample = TRUE, 
                   p.interval = p.ell, 
